@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Multi-Disciplinary Project</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="Kevin">
+  <meta name="description" content="Multi-Disciplinary Project">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="_css/styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Caveat|Montserrat:400,600&display=swap" rel="stylesheet">
+	<script src="_scripts/back-btn.js" async></script>
+	<script src="_scripts/fontAwsomeOffline.js" type="text/javascript" async></script>
+</head>
+<body class="mdp-header">
+	<button id="back-btn"><i class="fas fa-angle-double-up"></i></button>
+	<header>
+		<h1>Multi-Disciplinary Project</h1>
+		<h2 id="header2-override">CZ3004</h2>
+	</header>
+
+	<!-- NAVIGATION BAR -->
+  <nav role="navigation">
+      <ul class="nav-bar">
+          <li><a href="my-portfolio.html" title="Homepage">Home</a></li>
+          <li><a href="typing-speed-test.html" title="Personal Projects">Personal Projects</a></li>
+      </ul>
+  </nav>
+
+  <!-- Add sidebar to navigate throughout the page --> 
+
+  <main>
+  	<article class="mdp-main">
+  		<img class="robot" src="images/MDP_robot_crop.jpg" alt="MDP Robot">
+  		<!-- OVERVIEW -->
+  			<section class="mdp-content-wrap">
+	  			<h2 class="mdp-title-wrap">Overview</h2>
+	  			<p>In this project, a robot was developed to traverse an arena that contains walls, obstacle blocks, images attached to the obstacle blocks, the start zone, and the goal zone. The aim of the robot is to explore the arena, capture images, and race from the start to the goal zone through the fastest path. To develop such robot, hardware components such as an Arduino Uno, a Raspberry Pi, a 6-volt battery, power banks, DC motors with wheels, Infrared (IR) sensors, and a Raspberry Pi camera, is required.</p>
+	  			<p>In this page, we will only be introducing the foundation hardware components of the robot which are:</p>
+	  			<ol class="anchor-override">
+	  				<li><a href="#arduino" title="">Arduino Uno</a></li>
+						<li><a href="#battery" title="">6-volt Battery</a></li>
+						<li><a href="#motors" title="">DC motors with Encoders</a></li>
+						<li><a href="#sensors" title="">Infrared (IR) Sensors (Long and short range)</a></li>
+	  			</ol>
+	  			<p class="anchor-override">Too long to read? See our results <a href="#results" title="Final Results">here</a>!</p>
+	  		</section>
+				
+				<!-- ARDUINO UNO -->
+  			<section class="mdp-content-wrap">
+  				<h2 id="arduino" class="mdp-title-wrap">1. Arduino Uno</h2>
+  				<p>The Arduino Uno was used as the microcontroller board in our robot, along with the Pololu Dual VHN5019 Motor Driver Shield mounted on top of it to drive the DC motors for its mobility (See Figure 2).</p>
+  				<figure>
+  					<img class="mdp-img" src="images/motorDriverShield.jpg" alt="Motor Driver Shield">
+  					<figcaption>Figure 2: Motor Driver Shield mounted on the Arduino Uno</figcaption>
+  				</figure>
+  				<p>The aim of the Arduino Uno is to provide the basic movements of the robot by controlling the DC motor. These movements includes moving forward, backward, and angle rotations of the robot. The program code offers predetermined values to move between each grid (each grid is 10cm), as well as 90 and 180 degree turns. Our code also includes functionalities such as taking in infrared (IR) sensor readings, obstacle detection and calibrations to align the robot’s position to provide accuracy and ensure that it stays on its original path at all times. These functionalities will be utilized as and when the main algorithm of the robot, deems it is useful.</p>
+  			</section>
+
+  			<!-- 6-VOLT BATTERY -->
+  			<section class="mdp-content-wrap">
+  				<h2 id="battery" class="mdp-title-wrap">2. 6-Volt Battery</h2>
+  				<figure>
+  					<img class="mdp-img" src="images/6v-33ah-sealed-lead-acid-battery.jpg" alt="6-Volt Battery">
+  					<figcaption>Figure 3: An SLA 6-volt TLA633 battery</figcaption>			
+  				</figure>
+  				<p>A SLA 6-Volt TLA633 battery (see Figure 3) is mounted at the back of the robot. It supplies power to the power regulator board that is mounted on top of the Motor Driver Shield. The power regulator board then distributes enough power for the rest of the components such as DC motors, IR sensors and the Arduino Uno to operate.</p>
+  			</section>
+
+  			<!-- DC MOTORS WITH ENCODERS-->
+  			<section class="mdp-content-wrap">
+  				<h2 id="motors" class="mdp-title-wrap">3. DC Motors</h2>
+  				<figure>
+  					<img class="mdp-img" src="images/DC_Motor_with_Encoder.jpg" alt="DC Motor">
+  					<figcaption>Figure 4: DC Motor</figcaption>
+  				</figure>
+  				<p>To give the robot the ability to move, two DC motors were used. However, even though both motors are of the same model, their speed performances may slightly be off, which causes the robot to swerve to the side. In order to have the motors run at the same speed and ensure that it travels in a straight line, a closed-loop control system was implemented.</p>
+
+  				<!-- ENCODERS -->
+  				<h3>3.1. Encoders</h3>
+  				<figure>
+  					<img class="mdp-img" src="images/Encoder.jpg" alt="Encoder">
+  					<figcaption>Figure 4.1: Encoder</figcaption>
+  				</figure>
+  				<p>Attached to the motors, are the encoders. They help to measure the pulse width and also in calculating the number of degrees the wheels have rotated. This allows us to keep track of how far the robot have moved, the number of revolutions it needs to turn either to the left or the right and the steps it needs to take for each grid. This would be used as the feedback for the close-loop control system.</p>
+
+  				<!-- DATA FINDINGS OF DC MOTORS -->
+  				<h3>3.2. Data Findings of DC Motors</h3>
+  				<p>The first step was to compute the number of revolutions per minute (RPM). Using the encoders attached on the motors that measures the pulse width, the following formula was used to compute in Arduino with interrupts:</p>
+  				<code>RPM = 60000/(1.1245*Pulse Width)</code>
+  				<p>Next, an RPM vs Speed graph was plotted to estimate the speed needed to achieved the desired RPM and observe if any of motors is under performing. This was done by plotting at different speeds ranging from 0 to 400 at an increment of 50.</p>
+  				<figure class="img-flex">
+  					<img class="mdp-img img-item" src="images/LeftMotorRPM.xlsx-Excel.png" alt="Left Motor RPM">
+  					<img class="mdp-img img-item" src="images/RightMotorRPM.xlsx-Excel.png" alt="Right Motor RPM">
+  					<figcaption class="caption-item">Figure 4.2a: RPM vs Speed Graph</figcaption>
+  				</figure>
+  				<p>To analyze the behavior of how each motors performed, a motor step test was plotted. This time, the graph was recorded by setting the speed at 300 for the first 5ms, followed by a sudden drop in speed at 250 for another 5ms.</p>
+  				<figure class="img-flex">
+  					<img class="mdp-img img-item" src="images/LeftMotorStepTest.xlsx-Excel.png" alt="Left Motor Step Test">
+  					<img class="mdp-img img-item" src="images/RightMotorStepTest.xlsx-Excel.png" alt="Right Motor Step Test">
+  					<figcaption class="caption-item">Figure 4.2b: Motor Step Test Graph</figcaption>
+  				</figure>
+  				<p>It can be observed that the RPM values for the right motor fluctuates a lot more compared to the left motor. As expected, this causes the robot to swerve to the right as its RPM is slightly slower compared to the left motor at any given speed.</p>
+
+  				<!--CLOSED-LOOP CONTROL -->
+  				<h3>3.3. CLosed-Loop Control</h3>
+  				<p>After gathering the data needed, a Proportional-Integral-Derivative(PID) Controller was used for our closed-loop control system to reduce the error. In this case, the PID controller was used on the right motor, with the left motor chosen as its set point since it has a more stable RPM at any given speed. This way, the PID controller would aim to increase the the right motor’s RPM to catch up with the left motor’s to ensure it rotates at the same desired speed.</p>
+  				<figure>
+  					<img class="mdp-img img-resize1" src="images/PID-Controller-Block-Diagram.pptx.png" alt="PID Controller Block Diagram">
+  					<figcaption>Figure 4.3: PID Controller Block Diagram</figcaption>
+  				</figure>
+  				<p>After some tests with trials and errors, it was found that the value of the proportional response, Kp, is to be at 20. However, although the error is now zero and the robot moves straight, it tends to deviate to the right at the start due to the right motor needing some time to catch up to the left motor thus, building accumulated constant error overtime.</p>
+  				<p>To counter this problem, we added the integral response, Ki which helps to remove constant errors in the control system. This would continually sum the error up, no matter how small it is which will eventually be significantly enough to adjust the controller output. Eventually the value of Ki, was found to be at 80, further reducing the steady-state error and finally allowing our robot to move in a straight line motion.</p>
+  			</section>
+
+  			<!-- INFRARED (IR) SENSORS -->
+  			<section class="mdp-content-wrap">
+  				<h2 id="sensors" class="mdp-title-wrap">4. Infrared (IR) Sensors</h2>
+  				<p>As the robot traverse around the arena, sensors are required for the robot to detect obstacle blocks and walls. Therefore, our robot used 5 Sharp GP2Y0A21YK short-range IR sensors and 1 Sharp GP2Y0A02YK long-range sensor (see Figure 5) to traverse around the arena.</p>
+  				<figure>
+  					<img class="mdp-img img-resize2" src="images/IR_Sensors.jpg" alt="IR Sensors">
+  					<figcaption>Figure 5: A short-range IR sensor (left) and a long-range IR sensor (right)</figcaption>
+  				</figure>
+
+  				<!-- INFRARED (IR) CALIBRATION -->
+  				<h3>4.1. Infrared (IR) Sensors Calibration</h3>
+  				<p>When reading raw values from the IR sensors, the analog output voltage will be returned. The closer the obstacle is from the IR sensor, the higher the analog output voltage (see Figure 5.1).</p>
+  				<figure>
+  					<img class="mdp-img" src="images/IR_reflectiveGraph.png" alt="IR Reflective Graph">
+  					<figcaption>Figure 5.1: Graph of the distance of object vs the analog output voltage</figcaption>
+  				</figure>
+  				<p>However, having an analog output voltage is not very useful. We have to convert it into a distance in centimeters from the obstacle to the robot. Below are the formulas used to the short-range sensor and the long-range sensor:</p>
+  				<h4>Short-range sensor</h4>
+  				<code>Distance = ((67870.0 / (AnalogOutputVoltage- 3.0)) - 40.0)/10</code>
+  				<h4>Long-range sensor</h4>
+  				<code>Distance = 65pow(AnalogOutputVoltage0.0048828125, -1.10)</code>
+  				<p>Below are the steps to calibrate the IR sensors:</p>
+  				<ol>
+  					<li>Firstly, the IR sensors are to be mounted on the robot to get the analog output voltage. This will take consideration of the offset of the IR sensor from the edge of the robot.</li>
+						<li>Next, place the edge of the robot at the start of the measuring tape.</li>
+						<li>Place the obstacle away from the robot.</li>
+						<li>Record the distance of the obstacle away from the robot and the distance value obtained.</li>
+						<li>Offset the distance value to the right value.</li>
+  				</ol>
+  				<p>Despite obtaining the distance during sensor reading, noises may occur, causing inaccurate readings. To solve this issue, sampling was implemented. 11 sample readings were taken, placed in an array, sorted in ascending order and the median value was taken. To increased the accurate more, we did another 16 samplings of the median values that were obtained. Therefore, the sampling is 11 by 16 which is the optimal sampling size to allow us to have a high accuracy of readings and not sacrificing the speed of computation.</p>
+
+  				<!-- ROBOT OBSTACLE DETECTION IN THE ARENA -->
+  				<h3>4.2. Robot obstacle detection in the arena</h3>
+  				<p>As our robot is to be placed in the center of a 3 by 3 spacing, IR sensors have to be placed in different positions of the robot and facing different directions. This allows the robot to detect obstacles and not having any blind spots. Due to the algorithm of the exploration of the map, our robot will be doing the left wall hug. Therefore, it affected the decision of the placement of the IR sensors. More IR sensors are placed facing the front and the left of the robot.</p>
+  				<p>After each movement or when requested by the main algorithm that is hosted in a Personal Computer, values of 1 to 8 will be sent over the communication. Value 1 to 7 represents the number of grids the obstacle is away from the robot. Value 8 means no obstacle is detected within the effective range. When there is an obstacle out of the effective range, the value readings are very unstable. Thus, only an effective range will be used. Therefore, short-range sensors will give a value of 1, 2, or 8 while the long-range sensor will give a value between 1 to 8.</p>
+  				<p>Below shows the IR sensors placement and the sensor readings to be returned to the main algorithm:</p>
+  				<figure>
+  					<img class="mdp-img img-resize3" src="images/IR_placement.png" alt="IR Placement on Robot">
+  					<figcaption>Figure 5.2: Placement of robot and possible sensor readings</figcaption> 
+  				</figure>
+
+  				<!-- POSITION CALIBRATION OF THE ROBOT -->
+  				<h3>4.3. Position Calibration of the Robot</h3>
+  				<p>As the robot traverse around the arena, it may begin to misalign. The robot may not face the correct angle or at the wrong position. Therefore, calibration is required to align the robot. This calibration functionality will be utilized by the main algorithm in the Personal Computer after the robot traversed every 3 grids during arena exploration.</p>
+  				<p>When the calibration command is issued from the main algorithm from the Personal Computer, the robot will first calibrate the angle of the robot. To calibrate the angle of the robot, the robot will use the front right and the left short-range sensors to compare the distance difference. If the difference in distance is larger than the allowable threshold (we used 0.15cm), angle calibration will occur. As we used the distance received from the left sensor minus the distance received from the right sensor, if the difference in distance is positive, it means the robot is facing the left more (see Figure 5.3a). The robot has to turn right to face perpendicular to the front. Else, the robot has to turn left till it faces perpendicular to the front.</p>
+  				<figure>
+  					<img class="mdp-img img-resize4" src="images/calibrationAngle.png" alt="Angle Calibration">
+  					<figcaption>Figure 5.3a: Angle Calibration of the Robot</figcaption>
+  				</figure>
+  				<p>In a situation when the robot faces a corner when it is misaligned, utilizing only the left and right short-range sensors will not work. The robot will not know it is facing a corner and calibrating using the left and right short-range sensors result in it to alight to the corner in a straight line. Therefore, the middle short-range sensor will be utilized to solve this issue. If the distance received from the middle sensor is longer than the right and left sensors, it means the robot is facing a corner (see Figure 5.3b). The robot will keep turning 10 degrees left until it is no longer facing a corner if there is no left wall. If there is a left wall, it may be facing a corner of the front and left wall (see right of Figure 5.3b). Turning 10 degrees left will mess up the position. Therefore, it will turn left 90 degrees to calibrate before turning back to the front to calibrate.</p>
+  				<figure>
+  					<img class="mdp-img img-resize5" src="images/CalibrateCorner.png" alt="Corner Calibration">
+  					<figcaption>Figure 5.3b: Angle Calibration when facing a corner</figcaption>
+  				</figure>
+  				<p>Despite calibrating the angle of the robot it is facing, calibration of the position of the robot is required. Using the front right and left short-range sensors, the robot will move forward or backward if the distance from the wall to the robot is too big or small respectively till it is within a threshold (see Figure 5.3c).</p>
+  				<figure>
+  					<img class="mdp-img img-resize6" src="images/CalibrateDist.png" alt="Distance Calibration">
+  					<figcaption>Figure 5.3c: Distance Calibration of the robot from the wall</figcaption>
+  				</figure>
+  				<p>The algorithm of the robot:</p>
+  				<ol>
+  					<li>Check if the robot if is facing a corner. If true, calibrate away from the corner.</li>
+						<li>Calibrate the angle of the robot against the wall or obstacle blocks.</li>
+						<li>Calibrate the distance of the robot against the wall or obstacle blocks.</li>
+						<li>Calibrate the angle of the robot again.</li>
+						<li>If there is a left wall, turn left and repeat from step 2 before turning right to face the front again.</li>
+  				</ol>
+  			</section>
+
+				<!-- RESULTS -->
+				<section class="mdp-content-wrap">
+					<h2 id="results">Results</h2>
+					<div class="mdp-results">	
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/mPb-UnH1TAo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					<ul>
+						<li>Exploration Time: 2mins 54s</li>
+						<li>Shortest Path: 14s</li>
+					</ul>
+					</div>
+				</section>
+
+				<!-- TEAM MEMBERS-->
+  			<section class="mdp-content-wrap team">
+					<h2>Team Members</h2>
+					<div class="members">
+					<img class="img-resize7" src="images/mdp-grp12.jpeg" alt="SCSE MDP Group 12">
+					<div>	
+						<h3>Algorithm</h3>
+							<ul>
+								<li>Poon Sin Ta</li>
+								<li>Li Shanlan</li>
+							</ul>
+						<h3>Arduino Team</h3>
+							<ul>
+								<li>Kevin</li>
+								<li>Hao Jie</li>
+							</ul>
+						<h3>Raspberry Pi Communications</h3>
+							<ul>
+								<li>Dennis Stevanus</li>
+								<li>Yuting</li>
+							</ul>
+						<h3>Image Recognition & Training</h3>
+							<ul>
+								<li>Vicknesh</li>
+							</ul>
+						<h3>Android Application</h3>
+							<ul>
+								<li>Ahmad Mustaqim</li>
+							</ul>
+					</div>
+					</div>
+  			</section>
+  	</article>
+  </main>
+
+  <!-- CONTACT INFO / SOCIAL MEDIA -->
+  	<footer>
+            <div class="content-wrap">
+                <h2>Keep in touch!</h2>
+                
+                <!-- Social media and contact links -->
+                <ul class="contact-list">
+                    <li><a href="mailto:kevintwl333@gmail.com">kevintwl333@gmail.com</a></li>
+                    <li><a href="https://www.linkedin.com/in/kevin-tan-wei-loong" target="_blank">LinkedIn</a></li>
+                    <li id="instagram">Instagram: &commat;kevinsashimi</li>
+                </ul>
+            </div>
+    </footer>      
+</body>
+</html>

@@ -1,0 +1,5 @@
+##### FUTURE IMPROVEMENTS #####
+
+-Add tabs
+-Add sliding windows
+-Improve responsive layout of the page

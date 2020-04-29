@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Typing Speed Test</title>
+  <meta charset="UTF-8">
+  <meta name="author" content="Kevin">
+  <meta name="description" content="Typing Speed Test">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="_css/styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Caveat|Montserrat:400,600&display=swap" rel="stylesheet">
+  <script src="_scripts/type-script.js" type="text/javascript" async></script>
+</head>
+<body>
+    <header class="type-header">
+        <h1>Typing Speed Test</h1>
+    </header>
+
+    <!-- NAVIGATION BAR -->
+        <nav role="navigation">
+            <ul class="nav-bar">
+                <li><a href="my-portfolio.html" title="Homepage">Home</a></li>
+                <li><a href="typing-speed-test.html" title="Personal Projects">Personal Projects</a></li>
+            </ul>
+        </nav>
+    
+    <main class="main">
+        <!--INTRODUCTION MESSAGE-->
+        <article class="intro">
+            <p>Welcome to the typing test! Your goal is to dupicate the provided text in the field below in the shortest time possible. Think you can do it? Good luck!</p>
+        </article>
+        
+        <section class="type-test">
+            <!-- ORIGINAL TEXT -->
+            <div id="origin-text">
+                <p>The quick brown fox jumps over the lazy dog</p>
+            </div>
+            
+            <!-- TEST AREA -->
+            <div class="test-wrap">
+                <textarea id="test-area" name="text area" rows="10" placeholder="Type here to start the clock."></textarea>
+            </div>
+
+            <!-- TIMER -->
+            <div class="timer">
+                <section id="clock">
+                    <div class="init-timer">00:00:00</div>
+                </section>
+
+                <button id="reset">Start Over</button>
+            </div>
+        </section>
+
+        <!-- CONTACT INFO / SOCIAL MEDIA -->
+        <footer>
+            <div class="content-wrap">
+                <h2>Keep in touch!</h2>
+                
+                <!-- Social media and contact links -->
+                <ul class="contact-list">
+                    <li><a href="mailto:kevintwl333@gmail.com">kevintwl333@gmail.com</a></li>
+                    <li><a href="https://www.linkedin.com/in/kevin-tan-wei-loong" target="_blank">LinkedIn</a></li>
+                    <li id="instagram">Instagram: &commat;kevinsashimi</li>
+                </ul>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
